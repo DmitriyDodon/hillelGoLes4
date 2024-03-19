@@ -2,26 +2,24 @@ package custommath
 
 import (
 	"crypto/rand"
+	"errors"
 	"math/big"
-
-	log "github.com/sirupsen/logrus"
 )
 
-func GenerateRandomNumber(maxNumber int) int64 {
+func GenerateRandomNumber(maxNumber int) (int64, error) {
 	randNumber, err := rand.Int(rand.Reader, big.NewInt(int64(maxNumber+1)))
 	if err != nil {
-		log.Error(err.Error())
-		return int64(maxNumber)
+		return int64(maxNumber), err
 	}
-	return randNumber.Int64()
+	return randNumber.Int64(), nil
 }
 
-func GenerateRandomNumberByRange(minNumber int, maxNumber int) int {
+func GenerateRandomNumberByRange(minNumber int, maxNumber int) (int, error) {
 	if minNumber >= maxNumber {
-		log.Error("min should be less than max")
-		return minNumber
+		return minNumber, errors.New("min should be less than max")
 	}
 
-	return int(GenerateRandomNumber(maxNumber-minNumber)) + minNumber
-}
+	randomNumber, err := GenerateRandomNumber(maxNumber - minNumber)
 
+	return int(randomNumber) + minNumber, err
+}

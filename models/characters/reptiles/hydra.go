@@ -16,14 +16,18 @@ type hydra struct {
 	name          string
 }
 
-func NewHydra(name string) *hydra {
-	return &hydra{
-		headsQuantity: int(custommath.GenerateRandomNumberByRange(hydraMinHeadsQuantity, hydraMaxHeadsQuantity)),
-		name:          name,
+func NewHydra(name string) (*hydra, error) {
+	hydraHeadQuantity, err := custommath.GenerateRandomNumberByRange(hydraMinHeadsQuantity, hydraMaxHeadsQuantity)
+	if err != nil {
+		return &hydra{}, err
 	}
+	return &hydra{
+		headsQuantity: int(hydraHeadQuantity),
+		name:          name,
+	}, nil
 }
 
-func (h *hydra) HeadsQuantity() int {
+func (h hydra) HeadsQuantity() int {
 	return h.headsQuantity
 }
 
@@ -46,15 +50,15 @@ func (h *hydra) HeadsGrowth(numberHeadLost int) {
 	fmt.Printf("%s вiдрощує %d знову за вiдрублену голову #%d.\n", h.name, newHeadsQuantity, numberHeadLost)
 }
 
-func (h *hydra) Name() string {
+func (h hydra) Name() string {
 	return h.name
 }
 
-func (h *hydra) HasHeadsLeft() bool {
+func (h hydra) HasHeadsLeft() bool {
 	return h.headsQuantity > 0
 }
 
-func (h *hydra) IsWon() (bool, error) {
+func (h hydra) IsWon() (bool, error) {
 	wonFlag := h.headsQuantity >= hydraHeadsQuantityToWin
 
 	if h.headsQuantity > 190 {
