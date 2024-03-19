@@ -27,12 +27,16 @@ func (f Fight) PrintFightersInfo() {
 	fmt.Printf("Hero info info: %#v\n", f.hero)
 }
 
-func (f *Fight) Start() {
+func (f *Fight) Start() error {
 	for {
 		f.figthIteration++
 		fmt.Printf("\n################## Нова %d iтерацiя бою ################################\n", f.figthIteration)
 
-		f.hero.AttackDragon(f.dragon)
+		err := f.hero.AttackDragon(f.dragon)
+
+		if err != nil {
+			return err
+		}
 
 		if !f.dragon.HasHeadsLeft() {
 			f.hero.WinVoice(*f.dragon)
@@ -42,7 +46,7 @@ func (f *Fight) Start() {
 		isDragonWon, err := f.dragon.IsWon()
 
 		if err != nil {
-			//оброботка ошибки, выше выкидывать нет смысла потому что бой остановится 
+			//оброботка ошибки, выше выкидывать нет смысла потому что бой остановится
 			log.Info(err.Error())
 			fmt.Println(err.Error())
 		}
@@ -52,4 +56,6 @@ func (f *Fight) Start() {
 		}
 		fmt.Printf("У дракона залишилось %d голiв\n", f.dragon.HeadsQuantity())
 	}
+
+	return nil
 }

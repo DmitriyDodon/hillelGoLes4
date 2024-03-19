@@ -9,7 +9,7 @@ import (
 func GenerateRandomNumber(maxNumber int) (int64, error) {
 	randNumber, err := rand.Int(rand.Reader, big.NewInt(int64(maxNumber+1)))
 	if err != nil {
-		return int64(maxNumber), err
+		return int64(0), err
 	}
 	return randNumber.Int64(), nil
 }

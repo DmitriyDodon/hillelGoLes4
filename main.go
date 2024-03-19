@@ -27,6 +27,10 @@ func main() {
 
 	fight.PrintFightersInfo()
 
-	fight.Start()
+	err = fight.Start()
+	if err != nil {
+		log.Error(err.Error())
+		return
+	}
 
 }
